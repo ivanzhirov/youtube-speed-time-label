@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Youtube time speed label",
+  "description": "Change youtube time label when speed is not normal. That would help to estimate real time.",
+  "version": "1.0.0",
+  "author": "Ivan Zhirov",
+  "content_scripts": [{
+    "css": ["style.css"],
+    "js": ["script.js"],
+    "matches": ["https://www.youtube.com/watch*"]
+  }]
+}
