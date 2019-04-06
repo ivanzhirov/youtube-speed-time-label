@@ -6,9 +6,10 @@
   "author": "Ivan Zhirov",
   "content_scripts": [{
     "css": ["style.css"],
-    "js": ["script.js"],
+    "js": ["contentscript.js"],
     "matches": ["https://www.youtube.com/watch*"]
   }],
+  "web_accessible_resources": ["script.js"],
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",

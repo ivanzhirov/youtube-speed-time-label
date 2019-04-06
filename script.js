@@ -4,12 +4,9 @@ const CONFIG = {
   rateSpanClass: 'rate-span'
 };
 const videoElement = document.querySelector('.html5-main-video');
-let speedLabel = null;
 
-
-// Initial page...
-// Todo: find a way with event listener. Seems like doesnt work now
-if (canAddDurationLabel(videoElement)) {
+// Initial application
+if (!isRateLabelExists() && canAddDurationLabel(videoElement)) {
     addSpeedLabel(videoElement);
     updateSpeedLabel(videoElement);
 }
@@ -17,10 +14,9 @@ if (canAddDurationLabel(videoElement)) {
 //
 // Events
 //
-// Fixme: doesnt work :(
 videoElement.addEventListener('loadedmetadata', e => {
   const video = e.target;
-  if (canAddDurationLabel(video)) {
+  if (!isRateLabelExists() && canAddDurationLabel(video)) {
     addSpeedLabel(video);
     updateSpeedLabel(video);
   }
@@ -28,7 +24,6 @@ videoElement.addEventListener('loadedmetadata', e => {
 
 videoElement.addEventListener('ratechange', e => {
   const video = e.target;
-
   if (canAddDurationLabel(video)) {
     if (!isRateLabelExists()) {
       addSpeedLabel(video)
@@ -40,7 +35,11 @@ videoElement.addEventListener('ratechange', e => {
 });
 
 videoElement.addEventListener('timeupdate', e => {
-  updateSpeedLabel(e.target);
+  const video = e.target;
+  if (!isRateLabelExists() && canAddDurationLabel(video)) {
+      addSpeedLabel(video)
+  }
+  updateSpeedLabel(video);
 });
 
 //
@@ -48,31 +47,39 @@ videoElement.addEventListener('timeupdate', e => {
 //
 function canAddDurationLabel(video) {
   return (
-    video.playbackRate !== 1.0 && !isLive()
+    video.playbackRate !== 1.0 &&
+    !isLive() &&
+    isVideoHasMetaData(video)
   );
 }
 
+
 function isLive() {
-  const classes = document.querySelector('.ytp-live-badge').parentNode.classList;
-  return classes.contains('ytp-live');
+  const node = document.querySelector('.ytp-live-badge').parentNode;
+  return node.classList.contains('ytp-live');
 }
 
 function isRateLabelExists() {
-  return Boolean(document.querySelector(`.${CONFIG.mainClassName}`))
+  const label = getRateLabel();
+  return Boolean(label)
+}
+
+function getRateLabel() {
+  return document.querySelector(`.${CONFIG.mainClassName}`)
+}
+
+function isVideoHasMetaData(video) {
+  return Boolean(video && video.duration);
 }
 
 function addSpeedLabel(video) {
-  if (!canAddDurationLabel(video)) {
-    return;
-  }
-
   const originalTimeLabel = document.querySelector('.ytp-time-display');
 
   const rateSpan = document.createElement('span');
-  rateSpan.textContent = '1.00x';
+  rateSpan.textContent = video.playbackRate + 'x';
   rateSpan.classList.add(CONFIG.rateSpanClass);
 
-  speedLabel = originalTimeLabel.cloneNode(true);
+  const speedLabel = originalTimeLabel.cloneNode(true);
   speedLabel.classList.add(CONFIG.mainClassName);
   speedLabel.querySelector('.ytp-live-badge').remove();
   speedLabel.prepend(rateSpan);
@@ -81,11 +88,11 @@ function addSpeedLabel(video) {
 }
 
 function updateSpeedLabel(video) {
-
   if (!isRateLabelExists()) {
     return
   }
 
+  const speedLabel = getRateLabel();
   const timeLabel = speedLabel.querySelector('.ytp-time-current');
   const durationLabel = speedLabel.querySelector('.ytp-time-duration');
   const rateLabel = speedLabel.querySelector(`.${CONFIG.rateSpanClass}`);
@@ -97,6 +104,7 @@ function updateSpeedLabel(video) {
 
 function cleanDrawSpeedLabel() {
   if (isRateLabelExists()) {
+    const speedLabel = getRateLabel();
     speedLabel.remove()
   }
 }
