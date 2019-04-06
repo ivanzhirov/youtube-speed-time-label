@@ -1,0 +1,15 @@
+.speed-time-label {
+    border: 1px solid white;
+    margin: 5px 0 0 5px;
+    line-height: 20px!important;
+    padding-left:0!important;
+}
+
+.speed-time-label .rate-span {
+    display: inline-block;
+    background-color: white;
+    color: black;
+    padding: 0 5px;
+    margin-right: 5px;
+    text-shadow: none;
+}
