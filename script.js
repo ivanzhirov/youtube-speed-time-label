@@ -96,7 +96,9 @@ function updateSpeedLabel(video) {
 }
 
 function cleanDrawSpeedLabel() {
-  speedLabel.remove()
+  if (isRateLabelExists()) {
+    speedLabel.remove()
+  }
 }
 
 //
