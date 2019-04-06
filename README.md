@@ -1,6 +1,6 @@
 # youtube-speed-time-label
 
-![Screenshot](icon128.png)
+![Screenshot](youtube-ad.png)
 
 Change youtube time label when speed is not normal. That would help to estimate real time.
 Add time label when you change the playback rate in video settings. 
