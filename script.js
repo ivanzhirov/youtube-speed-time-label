@@ -1,4 +1,8 @@
-// Config
+// Application config
+const CONFIG = {
+  mainClassName: 'speed-time-label',
+  rateSpanClass: 'rate-span'
+};
 const videoElement = document.querySelector('.html5-main-video');
 let speedLabel = null;
 
@@ -54,7 +58,7 @@ function isLive() {
 }
 
 function isRateLabelExists() {
-  return Boolean(document.querySelector('.speed-time-label'))
+  return Boolean(document.querySelector(`.${CONFIG.mainClassName}`))
 }
 
 function addSpeedLabel(video) {
@@ -66,10 +70,10 @@ function addSpeedLabel(video) {
 
   const rateSpan = document.createElement('span');
   rateSpan.textContent = '1.00x';
-  rateSpan.classList.add('rate-span');
+  rateSpan.classList.add(CONFIG.rateSpanClass);
 
   speedLabel = originalTimeLabel.cloneNode(true);
-  speedLabel.classList.add('speed-time-label');
+  speedLabel.classList.add(CONFIG.mainClassName);
   speedLabel.querySelector('.ytp-live-badge').remove();
   speedLabel.prepend(rateSpan);
 
@@ -84,7 +88,7 @@ function updateSpeedLabel(video) {
 
   const timeLabel = speedLabel.querySelector('.ytp-time-current');
   const durationLabel = speedLabel.querySelector('.ytp-time-duration');
-  const rateLabel = speedLabel.querySelector('.rate-span');
+  const rateLabel = speedLabel.querySelector(`.${CONFIG.rateSpanClass}`);
 
   timeLabel.textContent = msToTime(video.currentTime / video.playbackRate);
   durationLabel.textContent = msToTime(video.duration / video.playbackRate);
