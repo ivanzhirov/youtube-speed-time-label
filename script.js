@@ -13,6 +13,7 @@ if (canAddDurationLabel(videoElement)) {
 //
 // Events
 //
+// Fixme: doesnt work :(
 videoElement.addEventListener('loadedmetadata', e => {
   const video = e.target;
   if (canAddDurationLabel(video)) {
@@ -43,13 +44,13 @@ videoElement.addEventListener('timeupdate', e => {
 //
 function canAddDurationLabel(video) {
   return (
-    video.playbackRate !== 1.0 || isLive()  // fixme: isLive and add ? whaat?
+    video.playbackRate !== 1.0 && !isLive()
   );
 }
 
 function isLive() {
-  const attributes = document.querySelector('.ytp-live-badge').attributes;
-  return Boolean(attributes.disabled.value === '')
+  const classes = document.querySelector('.ytp-live-badge').parentNode.classList;
+  return classes.contains('ytp-live');
 }
 
 function isRateLabelExists() {
